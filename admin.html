@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Paneli</title>
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body>
+    <h2>MÜŞTERİ GERİ BİLDİRİMLERİ</h2>
+    <hr />
+    <div class="filter-wrapper">
+      <h4>Kullanıcı Yorumları</h4>
+      <select name="" id="filter">
+        <option value="Hepsi">Tüm Kategoriler</option>
+        <option value="Şikayet">Şikayet</option>
+        <option value="Öneri">Öneri</option>
+        <option value="Memnuniyet">Memnuniyet</option>
+      </select>
+    </div>
+    <div id="feedback-list"></div>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        onSnapshot,
+        query,
+        orderBy,
+        where,
+      } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+      import { firebaseConfig } from "./configAdmin.js";
+
+      
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      let unsubscribe;
+      const qry = query(collection(db, "feedback"), orderBy("tarih", "desc"));
+
+      unsubscribe = onSnapshot(qry, (snapshot) => {
+        const list = document.querySelector("#feedback-list");
+        list.innerHTML = "";
+
+        snapshot.forEach((doc) => {
+          const datum = doc.data();
+          let date = "Tarih Yok";
+          if (datum.tarih) {
+            date = datum.tarih.toDate().toLocaleString(`tr-TR`);
+          }
+          list.innerHTML += `
+                <div class="kart">
+                <small id="date" style="color: gray;">${date}</small>
+                <h4 id="nameCategory">${datum.isim} - ${datum.kategori}</h4>
+                <p>${datum.mesaj}</p>
+                <span id="score" >Puan: ${datum.puan}/5⭐</span>
+            </div>`;
+        });
+      });
+
+      const filterSelect = document.querySelector("#filter");
+      filterSelect.addEventListener("change", (e) => {
+        const electedCategory = e.target.value;
+        const ref = collection(db, "feedback");
+        let filteredQry;
+        if (unsubscribe) unsubscribe();
+        if (electedCategory === "Hepsi") {
+          filteredQry = query(ref, orderBy("tarih", "desc"));
+        } else {
+          filteredQry = query(
+            ref,
+            where("kategori", "==", electedCategory),
+            orderBy("tarih", "desc")
+          );
+        }
+
+        unsubscribe = onSnapshot(filteredQry, (snapshot) => {
+          const list = document.querySelector("#feedback-list");
+          list.innerHTML = "";
+
+          snapshot.forEach((doc) => {
+            const datum = doc.data();
+            let date = "Tarih Yok";
+            if (datum.tarih) {
+              date = datum.tarih.toDate().toLocaleString(`tr-TR`);
+            }
+            list.innerHTML += `
+                    <div class="kart">
+                        <small id="date" style="color: gray;">${date}</small>
+                        <h4 id="nameCategory">${datum.isim} - ${datum.kategori}</h4>
+                        <p>${datum.mesaj}</p>
+                        <span id="score">Puan: ${datum.puan}/5⭐</span>
+                    </div>`;
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

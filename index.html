@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Şikayet & Öneri</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <a
+      href="javascript:void(0)"
+      onclick="history.back(); return false;"
+      class="back-button"
+      id="okClick"
+    >
+      <svg
+        id="ok"
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        fill="currentColor"
+        class="bi bi-arrow-left"
+        viewBox="0 0 16 16"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"
+        />
+      </svg>
+    </a>
+    <div id="wrapper"></div>
+    <div id="container">
+      <h2>Görüşlerinizi Bizimle Paylaşın</h2>
+      <hr />
+      <div class="type-text">
+        <input type="radio" id="Şikayet" name="type" value="Şikayet" />
+        <label for="Şikayet">Şikayet</label>
+
+        <input type="radio" id="Öneri" name="type" value="Öneri" />
+        <label for="Öneri">Öneri</label>
+
+        <input type="radio" id="Memnuniyet" name="type" value="Memnuniyet" />
+        <label for="Memnuniyet">Memnuniyet</label>
+      </div>
+      <label id="yourScore">Puanınız (1-5)⭐</label>
+      <input type="number" id="score" min="1" max="5" value="5" />
+      <textarea
+        id="message"
+        placeholder="Görüşlerinizi yazın..."
+        rows="5"
+      ></textarea>
+
+      <div class="user-info">
+        <input type="text" id="userName" placeholder="Adınız Soyadınız.." />
+        <div class="switch-wrapper">
+          <label class="toggle-switch">
+            <span class="toggle-slider"></span>
+            <input type="checkbox" id="anonimCheck" />
+          </label>
+          <span class="toggle-text">Anonim olarak gönder</span>
+        </div>
+      </div>
+      <button id="send">Geri Bildirimi İlet</button>
+    </div>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
